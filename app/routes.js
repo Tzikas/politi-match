@@ -21,9 +21,14 @@ function getListOfMembers(state) {
     //   getBillByMemberID(senator.id);
     // });
     getBillByMemberID(myJson.results[0].id);
+
+    Promise.all(promises).then(function(values) {
+      console.log('the end');
+    });
   });
 }
 
+let promises = [];
 
 
 function getBillByMemberID(id){
@@ -37,13 +42,13 @@ function getBillByMemberID(id){
   .then(function(myJson) {
     console.log(myJson);
     myJson.results[0].bills.forEach(bill => {
-      // getBillSummary(bill.bill_uri);
+      promises.push(getBillSummary(bill.bill_uri));
     });
   });
 }
 
 function getBillSummary(uri){
-  fetch(uri,
+  return fetch(uri,
   {
     headers: {'X-API-Key': PROPUBKEY}
   })
