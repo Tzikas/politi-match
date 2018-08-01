@@ -1,4 +1,9 @@
 // server.js
+// ProPublica API Key:
+// xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg
+//  ==================================
+// Google Maps API Key & Civic:
+// AIzaSyBzXa_Yf_ALObEyPg2gRdstnc2E6NQ9S9A
 
 // set up ======================================================================
 // get all the tools we need
@@ -17,6 +22,9 @@ var session      = require('express-session');
 var configDB = require('./config/database.js');
 
 var path = require('path');
+
+
+
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -45,6 +53,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
 
 // launch ======================================================================
 app.listen(port);

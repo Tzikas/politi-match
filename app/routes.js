@@ -1,11 +1,75 @@
+var finder = require('congressional-district-finder');
+var fetch = require('node-fetch');
+
+const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
+const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
+
+// =============================================
+getListOfMembers(`TX`);
+
+function getListOfMembers(state) {
+  fetch(`https://api.propublica.org/congress/v1/members/senate/${state}/current.json`,
+  {
+    headers: {'X-API-Key': PROPUBKEY}
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+    // myJson.results.forEach(senator => {
+    //   getBillByMemberID(senator.id);
+    // });
+    getBillByMemberID(myJson.results[0].id);
+  });
+}
+
+
+
+function getBillByMemberID(id){
+  fetch(`https://api.propublica.org/congress/v1/members/${id}/bills/introduced.json`,
+  {
+    headers: {'X-API-Key': PROPUBKEY}
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+    myJson.results[0].bills.forEach(bill => {
+      // getBillSummary(bill.bill_uri);
+    });
+  });
+}
+
+function getBillSummary(uri){
+  fetch(uri,
+  {
+    headers: {'X-API-Key': PROPUBKEY}
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(myJson) {
+    console.log(myJson);
+    return myJson;
+    // displayBillSummary(myJson.results);
+  });
+}
+
+// ============================================
+
 module.exports = function(app, passport) {
+
 
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
     app.get('/', function(req, res) {
-        res.render('index.hbs');
-    });
+
+
+           res.render('index.hbs');
+        });
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, function(req, res) {
