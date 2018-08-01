@@ -20,7 +20,12 @@
   </p>
   <button type="button" name="button" class="js-btn-choice js-btn-yes">YES</button>
   <button type="button" name="button" class="js-btn-choice js-btn-no">NO</button>
+    {{#each bills}}
+        {{this.status}}
+        {{this.results.0.title}}
+        <br><br><br>
 
+    {{/each}}
 
 
     <div class="text-center">

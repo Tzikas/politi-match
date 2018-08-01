@@ -5,32 +5,76 @@ const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
 const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
 
 // =============================================
-getListOfMembers(`TX`);
 
-function getListOfMembers(state) {
-  fetch(`https://api.propublica.org/congress/v1/members/senate/${state}/current.json`,
+const getListOfMembers =  (state) => {
+  return fetch(`https://api.propublica.org/congress/v1/members/senate/${state}/current.json`,
   {
     headers: {'X-API-Key': PROPUBKEY}
   })
   .then(function(response) {
     return response.json();
   })
-  .then(function(myJson) {
-    console.log(myJson);
-    // myJson.results.forEach(senator => {
-    //   getBillByMemberID(senator.id);
-    // });
-    getBillByMemberID(myJson.results[0].id);
+  .then(async function(myJson) {
+    myJson.results.forEach(senator => {
+       urls.push(`https://api.propublica.org/congress/v1/members/${senator.id}/bills/introduced.json`);
+     });
+    //let all =  await getMemberBills(urls);
+    let all = await getMemberBills(urls)
+    console.log('all ',all)
+    return all; 
 
-    Promise.all(promises).then(function(values) {
-      console.log('the end');
-    });
-  });
+  })
+
 }
 
-let promises = [];
+let urls = [];
+let billUrls = [] 
 
 
+
+/***/
+const getMemberBills =  async function(urls) {
+  return  Promise.all(urls.map(url =>
+      fetch(url, {
+        headers: {'X-API-Key': PROPUBKEY}
+      })
+        .then(resp => resp.json())))
+        .then(res => {
+          res[0].results[0].bills.forEach(bill => {
+            billUrls.push(bill.bill_uri);
+          });
+
+        }).then(()=>{
+          console.log("got all member bills")
+          return getAllBills(billUrls)
+        })
+}
+
+
+const getAllBills = (urls) => { 
+  return Promise.all(urls.map(url =>
+      fetch(url, {
+        headers: {'X-API-Key': PROPUBKEY}
+      })
+        .then(resp => resp.json())))
+        .then(res => {
+          console.log('got every bill final!!') 
+          //console.log(res)
+          return res
+        })
+}
+
+
+
+
+
+
+
+/**/
+
+
+
+/*
 function getBillByMemberID(id){
   fetch(`https://api.propublica.org/congress/v1/members/${id}/bills/introduced.json`,
   {
@@ -61,7 +105,7 @@ function getBillSummary(uri){
     // displayBillSummary(myJson.results);
   });
 }
-
+*/
 // ============================================
 
 module.exports = function(app, passport) {
@@ -70,10 +114,12 @@ module.exports = function(app, passport) {
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
-    app.get('/', function(req, res) {
+    app.get('/', async function(req, res) {
 
-
-           res.render('index.hbs');
+           let bills = await getListOfMembers(`TX`);
+           console.log('bills',bills) 
+           console.log(bills[0].results[0].title)
+           res.render('index.hbs', {bills:bills});
         });
 
     // PROFILE SECTION =========================
