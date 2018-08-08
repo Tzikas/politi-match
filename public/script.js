@@ -21,6 +21,31 @@
 // }
 //
 // getLocation();
+
+function handleYesNoBtn() {
+  $('.js-btn-choice').on('click', function(event){
+    console.log(event.currentTarget.value);
+    console.log(event);
+    console.log($(this).closest('li').data('bill_uri'));
+    const bill_uri = $(this).closest('li').data('bill_uri');
+    const value = event.currentTarget.value;
+    $.post("/save-bills", {suggest: bill_uri, decision: value}, function(result){
+        console.log(result);
+    });
+  });
+}
+
+function saveBillDecision(){
+
+}
+
+
+$(handleYesNoBtn);
+
+
+
+
+
 //
 //
 // function showPosition(position){

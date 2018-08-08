@@ -1,5 +1,6 @@
 var finder = require('congressional-district-finder');
 var fetch = require('node-fetch');
+var User       = require('../app/models/user');
 
 const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
 const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
@@ -20,15 +21,14 @@ const getListOfMembers =  (state) => {
      });
     //let all =  await getMemberBills(urls);
     let all = await getMemberBills(urls)
-    console.log('all ',all)
-    return all; 
+    return all;
 
   })
 
 }
 
 let urls = [];
-let billUrls = [] 
+let billUrls = []
 
 
 
@@ -51,14 +51,14 @@ const getMemberBills =  async function(urls) {
 }
 
 
-const getAllBills = (urls) => { 
+const getAllBills = (urls) => {
   return Promise.all(urls.map(url =>
       fetch(url, {
         headers: {'X-API-Key': PROPUBKEY}
       })
         .then(resp => resp.json())))
         .then(res => {
-          console.log('got every bill final!!') 
+          console.log('got every bill final!!')
           //console.log(res)
           return res
         })
@@ -113,13 +113,24 @@ module.exports = function(app, passport) {
 
 // normal routes ===============================================================
 
+    app.post('/save-bills', isLoggedIn, function(req, res){
+      console.log(req.body, req.user);
+      User.update( { _id: req.user._id }, { $push: { votes: req.body  } } ).then(user => {
+        console.log(user, 'kiwi')
+         // user.votes.push(req.body)
+         // user.save()
+         res.json({success: true})
+       }).catch(err => {throw err})
+    });
+
     // show the home page (will also have our login links)
     app.get('/', async function(req, res) {
 
            let bills = await getListOfMembers(`TX`);
-           console.log('bills',bills) 
-           console.log(bills[0].results[0].title)
-           res.render('index.hbs', {bills:bills});
+           console.log('bills',bills)
+           console.log(bills[0].results[0])
+           console.log(bills[1].results[0].votes)
+           res.render('index.hbs', {bills:bills})
         });
 
     // PROFILE SECTION =========================
