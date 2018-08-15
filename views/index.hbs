@@ -13,37 +13,17 @@
         <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
     </div>
 
+  <form class="form" method="post" action="state-select">
+    <select name="states" class="chosen-select">
+      <option>What state do you live in?</option>
+      <option value="">Alabama</option>
+      <option value="TX">Texas</option>
+      <option value="MA">Massachusetts</option>
+    </select>
+    <input type="submit"></input>
+  </form>
 
-  <p>Would you vote for this Bill?</p>
-  <p class="js-bill-summary">
-    hello
-  </p>
-<div>
-  <ul>
-    {{#each bills}}
-    <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}">
-      <h4>{{this.results.0.title}}</h4>
-      {{#if this.results.0.summary}}
-        <div>{{this.results.0.summary}}</div>
-      {{else}}
-        <div>{{this.results.0.summary_short}}</div>
-      {{/if}}
-      <p>
-        {{this.results.0.sponsor}}
-      </p>
-      <p>
-        {{this.results.0.latest_major_action}}
-      </p>
-      <a>{{this.results.0.govtrack_url}}</a>
-      <div>
-        <button type="button" name="button" class="js-btn-choice js-btn-yes" value="yay">YES</button>
-        <button type="button" name="button" class="js-btn-choice js-btn-no" value="nay">NO</button>
-      </div>
-      <br><br><br>
-    </li>
-    {{/each}}
-  </ul>
-</div>
+  
 
 
     <div class="text-center">

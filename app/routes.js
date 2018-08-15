@@ -4,10 +4,13 @@ var User       = require('../app/models/user');
 
 const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
 const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
-
+let urls = [];
+let billUrls = [];
 // =============================================
 
 const getListOfMembers =  (state) => {
+    urls = [];
+    billUrls = [];
   return fetch(`https://api.propublica.org/congress/v1/members/senate/${state}/current.json`,
   {
     headers: {'X-API-Key': PROPUBKEY}
@@ -27,11 +30,6 @@ const getListOfMembers =  (state) => {
 
 }
 
-let urls = [];
-let billUrls = []
-
-
-
 /***/
 const getMemberBills =  async function(urls) {
   return  Promise.all(urls.map(url =>
@@ -49,7 +47,6 @@ const getMemberBills =  async function(urls) {
           return getAllBills(billUrls)
         })
 }
-
 
 const getAllBills = (urls) => {
   return Promise.all(urls.map(url =>
@@ -114,29 +111,41 @@ module.exports = function(app, passport) {
 // normal routes ===============================================================
 
     app.post('/save-bills', isLoggedIn, function(req, res){
-      console.log(req.body, req.user);
+    //   console.log(req.body, req.user);
       User.update( { _id: req.user._id }, { $push: { votes: req.body  } } ).then(user => {
-        console.log(user, 'kiwi')
+        // console.log(user, 'kiwi')
          // user.votes.push(req.body)
          // user.save()
          res.json({success: true})
        }).catch(err => {throw err})
     });
 
+    app.post('/state-select', isLoggedIn, function(req, res){
+        console.log('state select');
+        console.log(req.body);
+        User.update( { _id: req.user._id }, { $set: { state: req.body.states  } } ).then(user => {
+            //  res.json({success: true})
+            res.redirect("/profile");
+           }).catch(err => {throw err})
+    });
+
     // show the home page (will also have our login links)
     app.get('/', async function(req, res) {
-
-           let bills = await getListOfMembers(`TX`);
-           console.log('bills',bills)
-           console.log(bills[0].results[0])
-           console.log(bills[1].results[0].votes)
-           res.render('index.hbs', {bills:bills})
+        //    let bills = await getListOfMembers('TX');
+        //    console.log('bills',bills)
+        //    console.log(bills[0].results[0])
+        //    console.log(bills[1].results[0].votes)
+           res.render('index.hbs', {})
         });
 
     // PROFILE SECTION =========================
-    app.get('/profile', isLoggedIn, function(req, res) {
+    app.get('/profile', isLoggedIn, async function(req, res) {
+        console.log(req.user, 'distinguished USER');
+        let bills = await getListOfMembers(req.user.state);
+        console.log(bills[0].results[0]);
         res.render('profile.hbs', {
-            user : req.user
+            user : req.user,
+            bills: bills
         });
     });
 

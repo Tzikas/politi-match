@@ -22,6 +22,12 @@
 //
 // getLocation();
 
+
+
+$('.chosen-select').chosen();
+
+
+
 function handleYesNoBtn() {
   $('.js-btn-choice').on('click', function(event){
     console.log(event.currentTarget.value);
