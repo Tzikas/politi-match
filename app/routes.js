@@ -2,6 +2,7 @@ var finder = require('congressional-district-finder');
 var fetch = require('node-fetch');
 var User       = require('../app/models/user');
 
+
 const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
 const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
 let urls = [];
@@ -141,14 +142,29 @@ module.exports = function(app, passport) {
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, async function(req, res) {
         console.log(req.user, 'distinguished USER');
-        let bills = await getListOfMembers(req.user.state);
-        console.log(bills[0].results[0]);
+        let bills = [];
+        if(req.user.state){
+            bills = await getListOfMembers(req.user.state);
+        }
+        
         res.render('profile.hbs', {
             user : req.user,
             bills: bills
         });
     });
 
+    app.get('/bills', isLoggedIn, async function(req, res) {
+        console.log(req.user, 'distinguished USER');
+        let bills = [];
+        if(req.user.state){
+            bills = await getListOfMembers(req.user.state);
+        }
+        
+        res.render('bills.hbs', {
+            user : req.user,
+            bills: bills
+        });
+    });
     // LOGOUT ==============================
     app.get('/logout', function(req, res) {
         req.logout();
@@ -168,7 +184,7 @@ module.exports = function(app, passport) {
 
         // process the login form
         app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/profile', // redirect to the secure profile section
+            successRedirect : '/bills', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
         }));
@@ -181,7 +197,7 @@ module.exports = function(app, passport) {
 
         // process the signup form
         app.post('/signup', passport.authenticate('local-signup', {
-            successRedirect : '/profile', // redirect to the secure profile section
+            successRedirect : '/bills', // redirect to the secure profile section
             failureRedirect : '/signup', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
         }));

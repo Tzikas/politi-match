@@ -37,13 +37,25 @@ function handleYesNoBtn() {
     const value = event.currentTarget.value;
     $.post("/save-bills", {suggest: bill_uri, decision: value}, function(result){
         console.log(result);
+        i++;
+        nextQuestion();
     });
   });
 }
+let i = 0;
 
-function saveBillDecision(){
-
+function nextQuestion(){
+  $('li.js-bill').removeClass('show');
+  $('li.js-bill').eq(i).addClass('show');
+  console.log(i);
 }
+
+function handleClick(){
+  $('#show-bills').on('click', function(event){
+    nextQuestion();
+  });
+}
+
 
 
 $(handleYesNoBtn);

@@ -97,15 +97,19 @@
         </div>
     </div>
 
+    
 
-    <p>Would you vote for this Bill?</p>
+    
     {{#if user.state}}
         {{user.state}}
         <p class="js-bill-summary">
             hello
         </p>
+        <button id="show-bills">Find Match Percent</button>
         <div>
+            <p>Would you vote for this Bill?</p>
             <ul>
+                
                 {{#each bills}}
                 <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}">
                 <h4>{{this.results.0.title}}</h4>
@@ -144,9 +148,9 @@
     {{/if}}
   
 
-    <div class="text-center">
-        <p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
-        <p>Visit the <a href="http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local">tutorial</a>.</p>
-    </div>
+  
 
 </div>
+
+
+<script type="text/javascript">handleClick();</script>

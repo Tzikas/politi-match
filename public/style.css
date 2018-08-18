@@ -1,0 +1,19 @@
+
+
+ul {
+    position: relative;
+    border: 1px solid black;
+}
+
+li.js-bill {
+    position: absolute;
+    top: 0;
+    opacity: 0;
+    transition: all .3s;
+    pointer-events: none;
+}
+
+li.js-bill.show {
+    opacity: 1;
+    pointer-events: inherit;
+}
