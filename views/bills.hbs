@@ -108,10 +108,11 @@
         <button id="show-bills">Find Match Percent</button>
         <div>
             <p>Would you vote for this Bill?</p>
+            <div id="newDiv"></div>
             <ul>
-                
+            
                 {{#each bills}}
-                <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}">
+                <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}" data-sponsor="{{this.results.0.sponsor}}">
                 <h4>{{this.results.0.title}}</h4>
                 {{#if this.results.0.summary}}
                     <div>{{this.results.0.summary}}</div>
@@ -133,6 +134,7 @@
                 </li>
                 {{/each}}
             </ul>
+            
         </div>
     {{else}}
         <form class="form" method="post" action="state-select">

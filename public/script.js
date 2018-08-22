@@ -1,26 +1,4 @@
-// // console.log('hello');
-// const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
-// const PROPUBKEY = `xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg`;
-//
-// // const FINKEY = `jyN6PW1PA5FMD66QRAJ2nanubyFkiSk0BUDtQi2g`;
-//
-// fetch(`https://www.googleapis.com/civicinfo/v2/elections?key=${APIKEY}`)
-// .then(function(response) {
-//   return response.json();
-// })
-// .then(function(myJson) {
-//   // console.log(myJson);
-// });
-//
-// function getLocation() {
-//     if (navigator.geolocation) {
-//         navigator.geolocation.getCurrentPosition(showPosition);
-//     } else {
-//         x.innerHTML = "Geolocation is not supported by this browser.";
-//     }
-// }
-//
-// getLocation();
+
 
 
 
@@ -30,13 +8,24 @@ $('.chosen-select').chosen();
 
 function handleYesNoBtn() {
   $('.js-btn-choice').on('click', function(event){
-    console.log(event.currentTarget.value);
-    console.log(event);
-    console.log($(this).closest('li').data('bill_uri'));
+    //console.log(event.currentTarget.value);
+    //console.log(event);
+    //console.log($(this).closest('li').data('bill_uri'));
     const bill_uri = $(this).closest('li').data('bill_uri');
+    const sponsor = $(this).closest('li').data('sponsor');
     const value = event.currentTarget.value;
-    $.post("/save-bills", {suggest: bill_uri, decision: value}, function(result){
+    $.post("/save-bills", {suggest: bill_uri, decision: value, sponsor: sponsor}, function(result){
         console.log(result);
+        let a = result.sponsors;
+        $('#newDiv').empty();
+          for(key in a){
+            console.log(key) 
+            console.log('yay',a[key]['yay'])
+            console.log('nay',a[key]['nay'])
+           $('#newDiv').append(key, ' yay ',a[key]['yay'], ' nay ',a[key]['nay'])
+          }
+           
+        
         i++;
         nextQuestion();
     });

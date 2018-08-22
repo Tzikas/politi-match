@@ -70,40 +70,33 @@ const getAllBills = (urls) => {
 
 /**/
 
+function matchPercent(votes = [], body){
+   // Rounded(# of bills user voted yes to/# of bills voted) = Match %
+   // req.user.votes == Array
+   console.log('votes: ', votes, body);
+   let yay = 0;
+   let nay = 0;
+   let sponsors = {};
+   for(let i=0;i<votes.length;i++){
+    let vote = votes[i];
+    console.log('vote', vote, vote.decision);
+    if(vote.decision === 'yay') yay++;
+    if(vote.decision === 'nay') nay++;
+    
+    if (!(vote.sponsor in sponsors)){
+        sponsors[vote.sponsor] = {yay:0, nay:0}
+        sponsors[vote.sponsor][vote.decision] = 1   
+      } else {
+       sponsors[vote.sponsor][vote.decision]++
+      }
 
-
-/*
-function getBillByMemberID(id){
-  fetch(`https://api.propublica.org/congress/v1/members/${id}/bills/introduced.json`,
-  {
-    headers: {'X-API-Key': PROPUBKEY}
-  })
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    console.log(myJson);
-    myJson.results[0].bills.forEach(bill => {
-      promises.push(getBillSummary(bill.bill_uri));
-    });
-  });
+   }
+   console.log(yay, votes.length);
+   console.log('users yay percentage is ', yay/(votes.length));
+   console.log(sponsors);
+   return sponsors;
 }
 
-function getBillSummary(uri){
-  return fetch(uri,
-  {
-    headers: {'X-API-Key': PROPUBKEY}
-  })
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(myJson) {
-    console.log(myJson);
-    return myJson;
-    // displayBillSummary(myJson.results);
-  });
-}
-*/
 // ============================================
 
 module.exports = function(app, passport) {
@@ -113,11 +106,12 @@ module.exports = function(app, passport) {
 
     app.post('/save-bills', isLoggedIn, function(req, res){
     //   console.log(req.body, req.user);
-      User.update( { _id: req.user._id }, { $push: { votes: req.body  } } ).then(user => {
-        // console.log(user, 'kiwi')
+      User.findOneAndUpdate( { _id: req.user._id }, { $push: { votes: req.body  } } ).then(user => {
+        console.log(user, 'kiwi')
          // user.votes.push(req.body)
          // user.save()
-         res.json({success: true})
+         let sponsors = matchPercent(user.votes, req.body);
+         res.json({success: true, sponsors: sponsors})
        }).catch(err => {throw err})
     });
 
@@ -128,6 +122,14 @@ module.exports = function(app, passport) {
             //  res.json({success: true})
             res.redirect("/profile");
            }).catch(err => {throw err})
+    });
+
+    // SETTINGS SECTION =================
+
+    app.get('/settings', isLoggedIn, function(req, res){
+        res.render('settings.hbs', {
+            user: req.user
+        });
     });
 
     // show the home page (will also have our login links)
