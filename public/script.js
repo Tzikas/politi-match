@@ -22,7 +22,7 @@ function handleYesNoBtn() {
             console.log(key) 
             console.log('yay',a[key]['yay'])
             console.log('nay',a[key]['nay'])
-           $('#newDiv').append(key, ' yay ',a[key]['yay'], ' nay ',a[key]['nay'])
+           $('#newDiv').append('<br></br>', key, ' yay ',a[key]['yay'], ' nay ',a[key]['nay'])
           }
            
         
@@ -51,188 +51,58 @@ $(handleYesNoBtn);
 
 
 
+let room = 'high';
+// Socket
+$(function () {
+    var socket = io();
+    $('#chat-form').submit(function(){
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+  });
+  // var room = "abc123";
+  // socket.on('connect', function() {
+  //    // Connected, let's sign-up for to receive messages for this room
+  //   socket.emit('room', room);
+  // });
+});
+
+// var map = AmCharts.makeChart("mapdiv",{
+//   type: "map",
+//   theme: "light",
+//   panEventsEnabled : true,
+//   backgroundColor : "#535364",
+//   backgroundAlpha : 1,
+//   zoomControl: {
+//   zoomControlEnabled : true
+//   },
+//   dataProvider : {
+//   map : "usaHigh",
+//   getAreasFromMap : true,
+//   areas :
+//   []
+//   },
+//   areasSettings : {
+//   autoZoom : true,
+//   color : "#B4B4B7",
+//   colorSolid : "#84ADE9",
+//   selectedColor : "#84ADE9",
+//   outlineColor : "#666666",
+//   rollOverColor : "#9EC2F7",
+//   rollOverOutlineColor : "#000000"
+//   }
+//   });
+ 
+//   map.addListener("clickMapObject", function(event) {
+//       console.log(event);
+//       console.log(event.mapObject.id.split('-')[1]);
+//       let st = event.mapObject.id.split('-')[1];
+//       $.post("/test", {state: st}, function(result){
+//         console.log("RESULT",result);
+//       });
+//   });
 
 
-//
-//
-// function showPosition(position){
-//   // console.log(position);
-//   fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&key=${APIKEY}`)
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     // console.log(myJson);
-//     findRepresentatives(myJson.results[0].formatted_address);
-//   });
-// }
-//
-// function findRepresentatives(address){
-//   // console.log(typeof address);
-//   fetch(`https://www.googleapis.com/civicinfo/v2/representatives?key=${APIKEY}&address=${address}`)
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     console.log(myJson);
-//     // console.log(myJson.normalizedInput.state);
-//     getListOfMembers(myJson.normalizedInput.state);
-//   });
-// }
-//
-// function getListOfMembers(state) {
-//   fetch(`https://api.propublica.org/congress/v1/members/senate/${state}/current.json`,
-//   {
-//     headers: {'X-API-Key': PROPUBKEY}
-//   })
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     console.log(myJson);
-//     myJson.results.forEach(senator => {
-//       getBillByMemberID(senator.id);
-//     });
-//   });
-// }
-//
-// function getBillByMemberID(id){
-//   fetch(`https://api.propublica.org/congress/v1/members/${id}/bills/introduced.json`,
-//   {
-//     headers: {'X-API-Key': PROPUBKEY}
-//   })
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     console.log(myJson);
-//     myJson.results[0].bills.forEach(bill => {
-//       getBillSummary(bill.bill_uri);
-//     });
-//   });
-// }
-//
-// function getBillSummary(uri){
-//   fetch(uri,
-//   {
-//     headers: {'X-API-Key': PROPUBKEY}
-//   })
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     console.log(myJson);
-//     displayBillSummary(myJson.results);
-//   });
-// }
-//
-// function displayBillSummary(array){
-//   console.log(array);
-//   $('.js-bill-summary').append(
-//     `<h2>${array[0].sponsor}</h2>
-//     <h4>${array[0].title}</h4>
-//     <p>${array[0].summary_short}</p>
-//     <a class="js-info">more info</a>
-//     <button>yes</button>
-//     <button>no</button>
-//   <hr>`);
-// }
-//
-// function handleNextBill(array){
-//   let count = 1;
-//   $('.js-btn-choice').on('click', function(event){
-//     // console.log(array[1]);
-//     $('.js-bill-summary').text(array[count].summary);
-//     count++;
-//   });
-// }
-//
-//
-//
-//
-//
-//
-// //
-// // fetch(`https://api.propublica.org/congress/v1/members/P000592.json`,
-// // {
-// //   headers: {'X-API-Key': PROPUBKEY}
-// // })
-// // .then(function(response) {
-// //   return response.json();
-// // })
-// // .then(function(myJson) {
-// //   // console.log(myJson);
-// // });
-// //
-// // // https://api.propublica.org/congress/v1/members/{member-id}/votes.json
-// //
-// // fetch(`https://api.propublica.org/congress/v1/members/P000592/votes.json`,
-// // {
-// //   headers: {'X-API-Key': PROPUBKEY}
-// // })
-// // .then(function(response) {
-// //   return response.json();
-// // })
-// // .then(function(myJson) {
-// //   // console.log(myJson);
-// // });
-// //
-// // fetch(`https://api.propublica.org/congress/v1/115/house/sessions/2/votes/379.json`,
-// // {
-// //   headers: {'X-API-Key': PROPUBKEY}
-// // })
-// // .then(function(response) {
-// //   return response.json();
-// // })
-// // .then(function(myJson) {
-// //   // console.log(myJson);
-// // });
-// //
-// // fetch(`https://api.propublica.org/congress/v1/statements/latest.json`,
-// // {
-// //   headers: {'X-API-Key': PROPUBKEY}
-// // })
-// // .then(function(response) {
-// //   return response.json();
-// // })
-// // .then(function(myJson) {
-// //   // console.log(myJson);
-// // });
-// //
-// // fetch(`https://api.propublica.org/congress/v1/115/bills/hr5515.json`,
-// // {
-// //   headers: {'X-API-Key': PROPUBKEY}
-// // })
-// // .then(function(response) {
-// //   return response.json();
-// // })
-// // .then(function(myJson) {
-// //   // console.log(myJson);
-// //   displayBillSummary(myJson.results)
-// // });
-// //
-// //
-// // function displayBillSummary(array){
-// //   // console.log(array[0].summary);
-// //   $('.js-bill-summary').text(array[0].summary);
-// //   handleNextBill(array);
-// // }
-// //
-// // function handleNextBill(array){
-// //   let count = 1;
-// //   $('.js-btn-choice').on('click', function(event){
-// //     // console.log(array[1]);
-// //     $('.js-bill-summary').text(array[count].summary);
-// //     count++;
-// //   });
-// // }
-// //
-//
-//
-//
-//
-//
-//
-//
-//
-// //

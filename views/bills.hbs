@@ -31,7 +31,7 @@
         </div>
 
         <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
+        {{!-- <div class="col-sm-6">
             <div class="well">
                 <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
 
@@ -50,12 +50,12 @@
                 {{/if}}
 
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="row">
 
         <!-- TWITTER INFORMATION -->
-        <div class="col-sm-6">
+        {{!-- <div class="col-sm-6">
             <div class="well">
                 <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
 
@@ -73,10 +73,10 @@
                 {{/if}}
 
             </div>
-        </div>
+        </div> --}}
 
         <!-- GOOGLE INFORMATION -->
-        <div class="col-sm-6">
+        {{!-- <div class="col-sm-6">
             <div class="well">
                 <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
 
@@ -94,7 +94,7 @@
                 {{/if}}
 
             </div>
-        </div>
+        </div> --}}
     </div>
 
     
@@ -140,7 +140,7 @@
         <form class="form" method="post" action="state-select">
             <select name="states" class="chosen-select">
                 <option>What state do you live in?</option>
-                <option value="">Alabama</option>
+                <option value="AL">Alabama</option>
                 <option value="TX">Texas</option>
                 <option value="MA">Massachusetts</option>
             </select>
@@ -153,6 +153,8 @@
   
 
 </div>
-
+<script>
+    var room = 'republican';     
+</script>
 
 <script type="text/javascript">handleClick();</script>

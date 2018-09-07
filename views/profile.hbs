@@ -7,98 +7,53 @@
     </div>
 
     <div class="row">
+</div>
 
-        <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
-
-                {{#if user.local.email }}
-                    <p>
-                        <strong>id</strong>: {{ user._id }}<br>
-                        <strong>email</strong>:{{ user.local.email }}<br>
-                        <strong>password</strong>: {{ user.local.password }}
-                    </p>
-
-                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
-                {{else}}
-                    <a href="/connect/local" class="btn btn-default">Connect Local</a>
-                {{/if}}
-
-                
-
-            </div>
-        </div>
-
-        <!-- FACEBOOK INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3 class="text-primary"><span class="fa fa-facebook"></span> Facebook</h3>
-
-                <!-- check if the user has this token (is the user authenticated with this social account) -->
-                {{#if user.facebook.token }}
-                    <p>
-                        <strong>id</strong>: {{ user.facebook.id }}<br>
-                        <strong>token</strong>: {{ user.facebook.token }}<br>
-                        <strong>email</strong>: {{ user.facebook.email }}<br>
-                        <strong>name</strong>: {{ user.facebook.name }}<br>
-                    </p>
-
-                    <a href="/unlink/facebook" class="btn btn-primary">Unlink</a>
-                {{else}}
-                    <a href="/connect/facebook" class="btn btn-primary">Connect Facebook</a>
-                {{/if}}
-
-            </div>
-        </div>
-    </div>
-    <div class="row">
-
-        <!-- TWITTER INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3 class="text-info"><span class="fa fa-twitter"></span> Twitter</h3>
-
-                {{#if user.twitter.token }}
-                    <p>
-                        <strong>id</strong>: {{ user.twitter.id }}<br>
-                        <strong>token</strong>: {{ user.twitter.token }}<br>
-                        <strong>email</strong>: {{ user.twitter.email }}<br>
-                        <strong>name</strong>: {{ user.twitter.name }}<br>
-                    </p>
-
-                    <a href="/unlink/twitter" class="btn btn-primary">Unlink</a>
-                {{else}}
-                    <a href="/connect/twitter" class="btn btn-primary">Connect Twitter</a>
-                {{/if}}
-
-            </div>
-        </div>
-
-        <!-- GOOGLE INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google+</h3>
-
-                {{#if user.google.token }}
-                    <p>
-                        <strong>id</strong>: {{ user.google.id }}<br>
-                        <strong>token</strong>: {{ user.google.token }}<br>
-                        <strong>email</strong>: {{ user.google.email }}<br>
-                        <strong>name</strong>: {{ user.google.name }}<br>
-                    </p>
-
-                    <a href="/unlink/google" class="btn btn-primary">Unlink</a>
-                {{else}}
-                    <a href="/connect/google" class="btn btn-primary">Connect Google</a>
-                {{/if}}
-
-            </div>
-        </div>
-    </div>
+<script src="https://www.amcharts.com/lib/3/ammap.js" type="text/javascript"></script>
+<script src="https://www.amcharts.com/lib/3/maps/js/usaHigh.js" type="text/javascript"></script>
+<script src="https://www.amcharts.com/lib/3/themes/light.js" type="text/javascript"></script>
+<div id="mapdiv" style="width: 1000px; height: 450px;"></div>
+<script src="../script.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var map = AmCharts.makeChart("mapdiv",{
+    type: "map",
+    theme: "light",
+    panEventsEnabled : true,
+    backgroundColor : "#535364",
+    backgroundAlpha : 1,
+    zoomControl: {
+    zoomControlEnabled : true
+    },
+    dataProvider : {
+    map : "usaHigh",
+    getAreasFromMap : true,
+    areas :
+    []
+    },
+    areasSettings : {
+    autoZoom : true,
+    color : "#B4B4B7",
+    colorSolid : "#84ADE9",
+    selectedColor : "#84ADE9",
+    outlineColor : "#666666",
+    rollOverColor : "#9EC2F7",
+    rollOverOutlineColor : "#000000"
+    }
+    });
+   
+    map.addListener("clickMapObject", function(event) {
+        console.log(event);
+        console.log(event.mapObject.id.split('-')[1]);
+        let st = event.mapObject.id.split('-')[1];
+        $.post("/test", {state: st}, function(result){
+            //console.log("RESULT",result);
+        });
+    });
+</script>
+    
 
 
-    <p>Would you vote for this Bill?</p>
+<p>Would you vote for this Bill?</p>
     {{#if user.state}}
         {{user.state}}
         <p class="js-bill-summary">
@@ -143,10 +98,13 @@
 
     {{/if}}
   
+<form class="form" method="post" action="state-select">
+            <select name="states" class="chosen-select">
+                <option>What state do you live in?</option>
+                <option value="AL">Alabama</option>
+                <option value="TX">Texas</option>
+                <option value="MA">Massachusetts</option>
+            </select>
+            <input type="submit"></input>
+</form>
 
-    <div class="text-center">
-        <p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
-        <p>Visit the <a href="http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local">tutorial</a>.</p>
-    </div>
-
-</div>

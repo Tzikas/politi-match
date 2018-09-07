@@ -106,7 +106,7 @@ module.exports = function(app, passport) {
 
     app.post('/save-bills', isLoggedIn, function(req, res){
     //   console.log(req.body, req.user);
-      User.findOneAndUpdate( { _id: req.user._id }, { $push: { votes: req.body  } } ).then(user => {
+      User.findOneAndUpdate( { _id: req.user._id }, { $push: { votes: req.body  } }, {new: true} ).then(user => {
         console.log(user, 'kiwi')
          // user.votes.push(req.body)
          // user.save()
@@ -143,30 +143,77 @@ module.exports = function(app, passport) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, async function(req, res) {
-        console.log(req.user, 'distinguished USER');
-        let bills = [];
-        if(req.user.state){
-            bills = await getListOfMembers(req.user.state);
-        }
-        
+        // console.log(req.user, 'distinguished USER');
+        // let bills = [];
+        // if(req.user.state){
+        //     bills = await getListOfMembers(req.user.state);
+        // }
+
+        let senators = [];
+        req.user.votes.forEach(vote => {
+            for(let i=0;i<senators.length;i++){
+                if(senators[i].sponsor === vote.sponsor){
+                    senators[i].match++;
+                    return;
+                }
+            }
+            senators.push({
+                "sponsor": vote.sponsor,
+                "match": 1 
+            });
+        });
+        let sponsors = matchPercent(req.user.votes, req.body);
+        console.log("senators", senators, sponsors);
         res.render('profile.hbs', {
             user : req.user,
-            bills: bills
+            senators: senators, 
+            sponsor: sponsors
         });
     });
 
     app.get('/bills', isLoggedIn, async function(req, res) {
-        console.log(req.user, 'distinguished USER');
+        
         let bills = [];
+        
         if(req.user.state){
             bills = await getListOfMembers(req.user.state);
         }
         
+        // Use map to get a simple array of "val" values. Ex: [1,4]
+        let yFilter = req.user.votes.map(itemY => { return itemY.suggest;});
+        // Useful comment goes here
+        let filteredX = bills.filter( (itemX) => {
+             return !yFilter.includes(itemX.results[0].bill_uri);
+        });
+        
         res.render('bills.hbs', {
             user : req.user,
-            bills: bills
+            bills: filteredX
         });
     });
+
+    app.post('/test', isLoggedIn, async function(req, res) {
+        console.log("TEST", req.body);
+        let bills = [];
+        
+        if(req.body.state){
+            bills = await getListOfMembers(req.body.state);
+        }
+        
+        // Use map to get a simple array of "val" values. Ex: [1,4]
+        let yFilter = req.user.votes.map(itemY => { return itemY.suggest;});
+        // Useful comment goes here
+        let filteredX = bills.filter( (itemX) => {
+             return !yFilter.includes(itemX.results[0].bill_uri);
+        });
+        console.log('filterX', filteredX);
+        res.render('profile.hbs', {
+            user : req.user,
+            bills: filteredX
+        });
+    });
+
+
     // LOGOUT ==============================
     app.get('/logout', function(req, res) {
         req.logout();
@@ -186,7 +233,7 @@ module.exports = function(app, passport) {
 
         // process the login form
         app.post('/login', passport.authenticate('local-login', {
-            successRedirect : '/bills', // redirect to the secure profile section
+            successRedirect : '/profile', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
         }));
@@ -199,7 +246,7 @@ module.exports = function(app, passport) {
 
         // process the signup form
         app.post('/signup', passport.authenticate('local-signup', {
-            successRedirect : '/bills', // redirect to the secure profile section
+            successRedirect : '/profile', // redirect to the secure profile section
             failureRedirect : '/signup', // redirect back to the signup page if there is an error
             failureFlash : true // allow flash messages
         }));

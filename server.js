@@ -1,9 +1,5 @@
 // server.js
-// ProPublica API Key:
-// xKkfjJ7GGJhrI9cqvaQBPZRgXcuTrxopTj8KvMg
-//  ==================================
-// Google Maps API Key & Civic:
-// AIzaSyBzXa_Yf_ALObEyPg2gRdstnc2E6NQ9S9A
+
 
 // set up ======================================================================
 // get all the tools we need
@@ -23,6 +19,30 @@ var configDB = require('./config/database.js');
 
 var path = require('path');
 
+// Socket *****
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+// let room = 'abc123';
+// io.on('connection', function(socket){
+    
+    
+//     socket.on('room', function(room) {
+//         console.log('room', room)
+//         socket.join(room);
+
+//         socket.on('chat message', function(msg){
+//             console.log('orange', room);
+//             io.to(room).emit('chat message', msg);
+//         });
+//     });
+    
+// });
+
+
+// console.log('apple', room);
+// io.in(room).emit('chat message', 'what is going on, party people?');
+
+// *****
 
 
 
@@ -56,5 +76,5 @@ require('./app/routes.js')(app, passport); // load our routes and pass in our ap
 
 
 // launch ======================================================================
-app.listen(port);
+http.listen(port);
 console.log('The magic happens on port ' + port);
