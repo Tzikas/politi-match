@@ -1,4 +1,4 @@
-
+{{>header}}
 <div class="container">
 
     <div class="page-header text-center">
@@ -109,29 +109,29 @@
         <div>
             <p>Would you vote for this Bill?</p>
             <div id="newDiv"></div>
-            <ul>
+            <ul class="bills-ul">
             
                 {{#each bills}}
-                <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}" data-sponsor="{{this.results.0.sponsor}}">
-                <h4>{{this.results.0.title}}</h4>
-                {{#if this.results.0.summary}}
-                    <div>{{this.results.0.summary}}</div>
-                {{else}}
-                    <div>{{this.results.0.summary_short}}</div>
-                {{/if}}
-                <p>
-                    {{this.results.0.sponsor}}
-                </p>
-                <p>
-                    {{this.results.0.latest_major_action}}
-                </p>
-                <a>{{this.results.0.govtrack_url}}</a>
-                <div>
-                    <button type="button" name="button" class="js-btn-choice js-btn-yes" value="yay">YES</button>
-                    <button type="button" name="button" class="js-btn-choice js-btn-no" value="nay">NO</button>
-                </div>
-                <br><br><br>
-                </li>
+                    <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}" data-sponsor="{{this.results.0.sponsor}}">
+                        <h4>{{this.results.0.title}}</h4>
+                        {{#if this.results.0.summary}}
+                            <div>{{this.results.0.summary}}</div>
+                        {{else}}
+                            <div>{{this.results.0.summary_short}}</div>
+                        {{/if}}
+                        <p>
+                            {{this.results.0.sponsor}}
+                        </p>
+                        <p>
+                            {{this.results.0.latest_major_action}}
+                        </p>
+                        <a>{{this.results.0.govtrack_url}}</a>
+                        <div>
+                            <button type="button" name="button" class="js-btn-choice js-btn-yes" value="yay">YES</button>
+                            <button type="button" name="button" class="js-btn-choice js-btn-no" value="nay">NO</button>
+                        </div>
+                        <br><br><br>
+                    </li>
                 {{/each}}
             </ul>
             
@@ -158,3 +158,7 @@
 </script>
 
 <script type="text/javascript">handleClick();</script>
+
+
+
+{{>footer}}

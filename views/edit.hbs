@@ -1,0 +1,26 @@
+{{> header }}
+
+<h1 id="hello"></h1>
+
+<div class="ui main text container segment">
+    <div class="ui huge header">Edit Representative {{Rep.repName}}</div>
+    <form class="ui form" action="/reps/{{Rep._id}}?_method=PUT" method="POST">
+        <label>Name</label>
+        <div class="field ui fluid input">
+            <input type="text" name="rep[repName]" value="{{Rep.repName}}">
+        </div>
+        <label>Image</label>
+        <div class="field ui fluid input">
+            <input type="text" name="rep[image]" value="{{Rep.image}}">
+        </div>
+        <label>Description</label>
+        <div class="field">
+            <textarea class="ui segment" required name="rep[content]" id="description" cols="70" rows="10">
+                {{Rep.content}}
+            </textarea>
+        </div>
+        <input type="submit" class="ui button">
+    </form>
+</div>
+
+{{> footer }}

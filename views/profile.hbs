@@ -1,64 +1,19 @@
-
+{{>header}}
+<h1 class="hello"></h1>
 <div class="container">
 
-    <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-    </div>
+
 
     <div class="row">
 </div>
 
-<script src="https://www.amcharts.com/lib/3/ammap.js" type="text/javascript"></script>
-<script src="https://www.amcharts.com/lib/3/maps/js/usaHigh.js" type="text/javascript"></script>
-<script src="https://www.amcharts.com/lib/3/themes/light.js" type="text/javascript"></script>
+
 <div id="mapdiv" style="width: 1000px; height: 450px;"></div>
-<script src="../script.js" type="text/javascript"></script>
-<script type="text/javascript">
-    var map = AmCharts.makeChart("mapdiv",{
-    type: "map",
-    theme: "light",
-    panEventsEnabled : true,
-    backgroundColor : "#535364",
-    backgroundAlpha : 1,
-    zoomControl: {
-    zoomControlEnabled : true
-    },
-    dataProvider : {
-    map : "usaHigh",
-    getAreasFromMap : true,
-    areas :
-    []
-    },
-    areasSettings : {
-    autoZoom : true,
-    color : "#B4B4B7",
-    colorSolid : "#84ADE9",
-    selectedColor : "#84ADE9",
-    outlineColor : "#666666",
-    rollOverColor : "#9EC2F7",
-    rollOverOutlineColor : "#000000"
-    }
-    });
-   
-    map.addListener("clickMapObject", function(event) {
-        console.log(event);
-        console.log(event.mapObject.id.split('-')[1]);
-        let st = event.mapObject.id.split('-')[1];
-        $.post("/test", {state: st}, function(result){
-            //console.log("RESULT",result);
-        });
-    });
-</script>
+
     
 
 
-<p>Would you vote for this Bill?</p>
-    {{#if user.state}}
-        {{user.state}}
-        <p class="js-bill-summary">
-            hello
-        </p>
+    {{!-- {{#if user.state}}
         <div>
             <ul>
                 {{#each bills}}
@@ -96,9 +51,9 @@
             <input type="submit"></input>
         </form>
 
-    {{/if}}
+    {{/if}} --}}
   
-<form class="form" method="post" action="state-select">
+{{!-- <form class="form" method="post" action="state-select">
             <select name="states" class="chosen-select">
                 <option>What state do you live in?</option>
                 <option value="AL">Alabama</option>
@@ -106,5 +61,32 @@
                 <option value="MA">Massachusetts</option>
             </select>
             <input type="submit"></input>
-</form>
+</form> --}}
 
+<ul class="bills-ul">
+    {{#each bills}}
+        <li class="js-bill" data-bill_uri="{{this.results.0.bill_uri}}" data-sponsor="{{this.results.0.sponsor}}">
+            <h4>{{this.results.0.title}}</h4>
+            {{#if this.results.0.summary}}
+                <div>{{this.results.0.summary}}</div>
+            {{else}}
+                <div>{{this.results.0.summary_short}}</div>
+            {{/if}}
+            <p>
+                {{this.results.0.sponsor}}
+            </p>
+            <p>
+                {{this.results.0.latest_major_action}}
+            </p>
+            <a>{{this.results.0.govtrack_url}}</a>
+            <div>
+                <button type="button" name="button" class="js-btn-choice js-btn-yes" value="yay">YES</button>
+                <button type="button" name="button" class="js-btn-choice js-btn-no" value="nay">NO</button>
+            </div>
+            <br><br><br>
+        </li>
+    {{/each}}
+</ul>
+
+
+{{>footer}}

@@ -2,6 +2,13 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
+// define schema for representative post
+var repPostSchema = mongoose.Schema({
+    repName: String,
+    image: String,
+    content: String
+}); 
+
 // define the schema for our user model
 var userSchema = mongoose.Schema({
 
@@ -42,4 +49,7 @@ userSchema.methods.validPassword = function(password) {
 };
 
 // create the model for users and expose it to our app
-module.exports = mongoose.model('User', userSchema);
+var User = mongoose.model('User', userSchema);
+var RepPost = mongoose.model('repPost', repPostSchema);
+
+module.exports = {User, RepPost};

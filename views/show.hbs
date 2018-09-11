@@ -1,0 +1,24 @@
+{{> header}}
+
+<h1 id="hello"></h1>
+
+<div class="ui main text container segment">
+    <div class="ui huge header centered">{{Rep.repName}}</div>
+    <div class="ui top attached">
+        <div class="item">
+            <img class="ui centered rounded image" src="{{Rep.image}}">
+            <div class="description">
+                <p>{{Rep.content}}</p>
+            </div>
+            <a href="/reps/{{Rep._id}}/edit" class="ui green basi button">Edit</a>
+            <form action="/reps/{{Rep._id}}?_method=DELETE" method="POST" id="show-form">
+                <button class="ui red basic button">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{{> footer}}

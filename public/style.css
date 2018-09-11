@@ -1,6 +1,6 @@
 
 
-ul {
+ul.bills-ul {
     position: relative;
     border: 1px solid black;
 }
@@ -18,3 +18,27 @@ li.js-bill.show {
     pointer-events: inherit;
 }
 
+#icon {
+    font-size: 2em;
+}
+
+#hello {
+    margin-top: 2.0em;
+}
+
+#show-form {
+    display: inline;
+}
+
+#logout-btn {
+    text-align: right;
+}
+
+.indexPg {
+    background-image: url('https://pbs.twimg.com/profile_images/822251886988267520/28GpoRsy_400x400.jpg');
+    background-size: cover;
+}
+
+.index {
+    opacity: 0.8;
+}

@@ -1,6 +1,7 @@
 var finder = require('congressional-district-finder');
 var fetch = require('node-fetch');
-var User       = require('../app/models/user');
+var { User, RepPost } = require('./models/user');
+// var methodOverride = require('method-override');
 
 
 const APIKEY = `AIzaSyDnjF_rS5ujP9qBRHEvwGLrruPQ2g3EVDA`;
@@ -104,6 +105,86 @@ module.exports = function(app, passport) {
 
 // normal routes ===============================================================
 
+// CRUD ROUTES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // RepPost.create({
+    //     repName: 'Test Rep',
+    //     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Beto_O%27Rourke%2C_Official_portrait%2C_113th_Congress.jpg/220px-Beto_O%27Rourke%2C_Official_portrait%2C_113th_Congress.jpg',
+    //     content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry'
+    // });
+    app.get('/reps', (req, res) => {
+        RepPost.find({}, function(err, repposts){
+            if(err){
+                console.error(err);
+            } else {
+                res.render('reps', {
+                    reps: repposts
+                });
+            }
+        });
+    });
+
+    app.get('/reps/new', (req, res) => {
+        res.render('new');
+    });
+
+    app.post('/reps', (req, res) => {
+        let data = req.body.rep;
+        RepPost.create(data, function(err, newRep){
+            if(err){
+                console.error(err);
+            } else{
+                res.redirect('/reps');
+            }
+        });
+    });
+
+    app.get('/reps/:id', (req, res) => {
+        RepPost.findById(req.params.id, function(err, Rep){
+            if(err){
+                res.send('Representative may not exist');
+            } else {
+                res.render('show', {
+                    Rep: Rep
+                });
+            }
+        });
+    });
+
+    app.get('/reps/:id/edit', (req,res) => {
+        RepPost.findById(req.params.id, function(err, Rep){
+            if(err){
+                res.send('Representative may not exist');
+            } else {
+                res.render('edit', {
+                    Rep: Rep
+                });
+            }
+        });
+    });
+
+    app.put('/reps/:id', (req, res) => {
+        // id, newData, callback
+        RepPost.findByIdAndUpdate(req.params.id, req.body.rep, function(err, newRep){
+            if(err){
+                res.send('No abla ingles');
+            } else {
+                res.redirect('/reps/'+req.params.id);
+            }
+        });
+    });
+
+    app.delete('/reps/:id', (req, res) => {
+        RepPost.findByIdAndRemove(req.params.id, function(err){
+            if(err){
+                res.send("Didn't work");
+            } else {
+                res.redirect('/reps');
+            }
+        });
+    });
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
     app.post('/save-bills', isLoggedIn, function(req, res){
     //   console.log(req.body, req.user);
       User.findOneAndUpdate( { _id: req.user._id }, { $push: { votes: req.body  } }, {new: true} ).then(user => {
@@ -143,31 +224,32 @@ module.exports = function(app, passport) {
 
     // PROFILE SECTION =========================
     app.get('/profile', isLoggedIn, async function(req, res) {
-        // console.log(req.user, 'distinguished USER');
+        console.log('distinguished USER', req.user);
         // let bills = [];
         // if(req.user.state){
         //     bills = await getListOfMembers(req.user.state);
         // }
 
         let senators = [];
-        req.user.votes.forEach(vote => {
-            for(let i=0;i<senators.length;i++){
-                if(senators[i].sponsor === vote.sponsor){
-                    senators[i].match++;
-                    return;
-                }
-            }
-            senators.push({
-                "sponsor": vote.sponsor,
-                "match": 1 
-            });
-        });
+        // req.user.votes.forEach(vote => {
+        //     for(let i=0;i<senators.length;i++){
+        //         if(senators[i].sponsor === vote.sponsor){
+        //             senators[i].match++;
+        //             return;
+        //         }
+        //     }
+        //     senators.push({
+        //         "sponsor": vote.sponsor,
+        //         "match": 1 
+        //     });
+        // });
         let sponsors = matchPercent(req.user.votes, req.body);
-        console.log("senators", senators, sponsors);
+        // console.log("senators", senators, sponsors);
         res.render('profile.hbs', {
             user : req.user,
             senators: senators, 
-            sponsor: sponsors
+            sponsor: sponsors,
+            bills: req.flash('bills')
         });
     });
 
@@ -207,10 +289,16 @@ module.exports = function(app, passport) {
              return !yFilter.includes(itemX.results[0].bill_uri);
         });
         console.log('filterX', filteredX);
-        res.render('profile.hbs', {
-            user : req.user,
+        // res.render('profile', {
+        //     user : req.user,
+        //     bills: filteredX
+        // });
+        req.flash('bills', filteredX);
+        
+        res.json({
             bills: filteredX
         });
+        
     });
 
 

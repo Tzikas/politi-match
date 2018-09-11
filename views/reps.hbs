@@ -1,0 +1,22 @@
+{{> header}}
+
+
+<h1 id="hello"></h1>
+{{!-- {{reps}} --}}
+<ul>
+    {{#each reps}}
+        <li>
+            <h4>{{this.repName}}</h4>
+            <img src="{{this.image}}">
+            <p>
+                {{!-- Substring Problem this.content.substring(0,100) --}}
+                {{this.content}}
+            </p>
+            <a href="/reps/{{this._id}}">More Info</a>
+        </li>
+        <br><br>
+    {{/each}}
+</ul>
+
+
+{{> footer}}

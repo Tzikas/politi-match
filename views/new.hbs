@@ -1,0 +1,27 @@
+{{> header}}
+
+<h1 id="hello"></h1>
+
+<div class="ui main text container segment">
+    <div class="ui huge header">Add your Representatives</div>
+    <form action="/reps" method="POST">
+        <label>Name</label>
+        <div class="field ui fluid input">
+            <input type="text" name="rep[repName]" placeholder="name">
+        </div>
+        <label>Image</label>
+        <div class="field ui fluid input">
+            <input type="text" name="rep[image]" placeholder="image url">
+        </div>
+        <label>Description</label>
+        <div class="field">
+            <textarea class="ui segment" required name="rep[content]" id="description" cols="70" rows="10"></textarea>
+        </div>
+        <input type="submit" class="ui button">
+    </form>
+</div>
+
+
+
+
+{{>footer}}

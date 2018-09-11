@@ -14,37 +14,14 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
+var hbs          = require('express-handlebars');
 
 var configDB = require('./config/database.js');
 
 var path = require('path');
-
-// Socket *****
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-// let room = 'abc123';
-// io.on('connection', function(socket){
-    
-    
-//     socket.on('room', function(room) {
-//         console.log('room', room)
-//         socket.join(room);
 
-//         socket.on('chat message', function(msg){
-//             console.log('orange', room);
-//             io.to(room).emit('chat message', msg);
-//         });
-//     });
-    
-// });
-
-
-// console.log('apple', room);
-// io.in(room).emit('chat message', 'what is going on, party people?');
-
-// *****
-
-
+var methodOverride = require('method-override');
 
 // configuration ===============================================================
 mongoose.connect(configDB.url); // connect to our database
@@ -57,6 +34,14 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.json()); // get information from html forms
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(methodOverride('_method'));
+
+app.engine('hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: 'layout',
+    layoutsDir: __dirname + '/views',
+    partialsDir: __dirname + '/views/partials/'
+}));
 app.set('view engine', 'hbs'); // set up hbs for templating
 
 app.use(express.static(path.join(__dirname, 'public')));
