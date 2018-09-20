@@ -40,9 +40,18 @@ app.engine('hbs', hbs({
     extname: 'hbs',
     defaultLayout: 'layout',
     layoutsDir: __dirname + '/views',
-    partialsDir: __dirname + '/views/partials/'
+    partialsDir: __dirname + '/views/partials/',
+    helpers: {
+        json: function(context) {
+            return JSON.stringify(context);
+         }
+    }
 }));
 app.set('view engine', 'hbs'); // set up hbs for templating
+
+// hbs.registerHelper('json', function(context) {
+//     return JSON.stringify(context);
+//  });
 
 app.use(express.static(path.join(__dirname, 'public')));
 

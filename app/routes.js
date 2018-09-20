@@ -186,13 +186,18 @@ module.exports = function(app, passport) {
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     app.post('/save-bills', isLoggedIn, function(req, res){
-    //   console.log(req.body, req.user);
+      console.log('REQ>BODY', req.body);
       User.findOneAndUpdate( { _id: req.user._id }, { $push: { votes: req.body  } }, {new: true} ).then(user => {
         console.log(user, 'kiwi')
          // user.votes.push(req.body)
          // user.save()
          let sponsors = matchPercent(user.votes, req.body);
-         res.json({success: true, sponsors: sponsors})
+         res.json(
+            {
+                 success: true, 
+                 sponsors: sponsors
+            }
+        )
        }).catch(err => {throw err})
     });
 
@@ -219,7 +224,7 @@ module.exports = function(app, passport) {
         //    console.log('bills',bills)
         //    console.log(bills[0].results[0])
         //    console.log(bills[1].results[0].votes)
-           res.render('index.hbs', {})
+           res.render('index.hbs', {user: {votes:[]}});
         });
 
     // PROFILE SECTION =========================
@@ -244,11 +249,14 @@ module.exports = function(app, passport) {
         //     });
         // });
         let sponsors = matchPercent(req.user.votes, req.body);
-        // console.log("senators", senators, sponsors);
+        console.log('SPONSORS', sponsors);
+        //console.log("senators", senators, sponsors);
+        console.log('BILLS_PROFILE', req.flash('bills'));
         res.render('profile.hbs', {
             user : req.user,
             senators: senators, 
             sponsor: sponsors,
+            match: matchPercent(req.user.votes, req.body),
             bills: req.flash('bills')
         });
     });
@@ -267,7 +275,7 @@ module.exports = function(app, passport) {
         let filteredX = bills.filter( (itemX) => {
              return !yFilter.includes(itemX.results[0].bill_uri);
         });
-        
+        console.log('BILLS_BILLS', req.user);
         res.render('bills.hbs', {
             user : req.user,
             bills: filteredX
@@ -294,7 +302,7 @@ module.exports = function(app, passport) {
         //     bills: filteredX
         // });
         req.flash('bills', filteredX);
-        
+
         res.json({
             bills: filteredX
         });
@@ -316,7 +324,7 @@ module.exports = function(app, passport) {
         // LOGIN ===============================
         // show the login form
         app.get('/login', function(req, res) {
-            res.render('login.hbs', { message: req.flash('loginMessage') });
+            res.render('login.hbs', { message: req.flash('loginMessage'), user: {votes:[]}} );
         });
 
         // process the login form

@@ -3,14 +3,19 @@
         <title>PolitiMatch</title>
     </head>
 
-    <body>
-        <nav id="nav" class="ui fixed inverted menu">
-            <div class="ui container">
-                <div class="header item"><i id="icon" class="universal access icon"></i>PolitiMatch</div>
-                <a href="/profile" class="item">Find Match Percent</a>
-                <a href="/reps" class="item">Show My Representatives</a>
-                <a href="/reps/new" class="item">Add a Representative</a>
-                <a href="/logout" id="logout-btn" class="item">Logout</a>
-            </div>
-        </nav>
-   
+    <body id="header">
+        <section id="nav-container" class="ui main text container">
+            <nav id="nav" class="ui fixed inverted menu">
+                <div class="ui container">
+                    <div class="header item"><i id="icon" class="universal access icon"></i>PolitiMatch</div>
+
+                    <a href="/profile" class="item"><i class="percent icon" id="search"></i><p id="percent">Find Match Percent</p></a>
+                    <a href="/reps" class="item"><i class="eye icon" id="eye"></i><p id="show">Show My Representatives</p></a>
+                    <a href="/reps/new" class="item"><i class="plus icon" id="plus"></i><p id="add">Add a Representative</p></a>
+                    <a href="/logout" class="item" id="logout">Logout</a>
+                </div>
+            </nav>
+        </section>
+
+
+

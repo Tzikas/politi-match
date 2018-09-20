@@ -1,8 +1,14 @@
+* {
+    box-sizing: border-box;
+}
 
+#match-btn {
+    text-transform: capitalize;
+}
 
 ul.bills-ul {
     position: relative;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 li.js-bill {
@@ -41,4 +47,52 @@ li.js-bill.show {
 
 .index {
     opacity: 0.8;
+}
+
+
+#show, #percent, #add {
+    display: none;
+}
+
+#header-name {
+    display: none; 
+}
+
+#container-id {
+    padding: 0;
+    margin-top: 2.0em; 
+}
+
+/* For mobile phone*/
+#mapdiv {
+    width: 400px;
+    height: 300px;
+}
+
+/* For desktop: */
+@media only screen and (min-width: 768px){
+
+    #header {
+         /* background-color: red; */
+    }
+
+    #logout, #add, #show, #percent {
+        display: -webkit-box;
+        /* color: aqua; */
+    }
+
+    #eye, #search, #plus {
+        display: none;
+    } 
+
+    #mapdiv {
+
+        width: 1000px;
+        height: 450px; 
+    
+        /* Default: 
+        width: 1000px;
+        height: 450px; */
+    }
+
 }

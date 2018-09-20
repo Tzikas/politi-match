@@ -3,20 +3,37 @@
 
 <h1 id="hello"></h1>
 {{!-- {{reps}} --}}
-<ul>
-    {{#each reps}}
-        <li>
-            <h4>{{this.repName}}</h4>
-            <img src="{{this.image}}">
-            <p>
-                {{!-- Substring Problem this.content.substring(0,100) --}}
-                {{this.content}}
-            </p>
-            <a href="/reps/{{this._id}}">More Info</a>
-        </li>
-        <br><br>
-    {{/each}}
-</ul>
+
+<section class="ui main text container">
+    <div class="ui huge header">My Representatives</div>
+    <div class="ui top attached segment">
+        <div class="ui divided items">
+                {{#each reps}}
+                    <li class="item">
+                        <div class="image">
+                            <img src="{{this.image}}">
+                        </div>
+                        <div class="content">
+                            <a class="header" href="/reps/{{this._id}}">{{this.repName}}</a>
+                            <div class="description">
+                            <p>
+                                {{!-- Substring Problem this.content.substring(0,100) --}}
+                                {{this.content}}
+                            </p>
+                            </div>
+                            <div class="extra">
+                                <a href="/reps/{{this._id}}">More Info</a>
+                            </div>
+                        </div>
+                        
+                    </li>
+                    
+                {{/each}}
+        </div>
+    </div>
+</section>
+
+
 
 
 {{> footer}}
