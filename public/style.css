@@ -4,6 +4,11 @@
 
 #match-btn {
     text-transform: capitalize;
+    margin-top: 5px;
+}
+
+#newDiv {
+    margin-top: 5px;
 }
 
 ul.bills-ul {
@@ -11,12 +16,31 @@ ul.bills-ul {
     /* border: 1px solid black; */
 }
 
+.show-question {
+    display: none;
+    font-size: 1.07142857rem;
+    margin: calc(2rem - .14285714em) 0 1rem;
+    text-align: -webkit-center;
+    font-size: 1.07142857rem;
+    font-weight: 700;
+}
+
+
+
 li.js-bill {
     position: absolute;
     top: 0;
     opacity: 0;
     transition: all .3s;
     pointer-events: none;
+    border: 1px solid #d4d4d5;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: .28571429rem .28571429rem 0 0;
+    border-top-left-radius: 0.285714rem;
+    border-top-right-radius: 0.285714rem;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 
 li.js-bill.show {

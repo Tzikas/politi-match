@@ -127,7 +127,7 @@ module.exports = function(app, passport) {
         res.render('new');
     });
 
-    app.post('/reps', (req, res) => {
+    app.post('/reps',  (req, res) => {
         let data = req.body.rep;
         RepPost.create(data, function(err, newRep){
             if(err){

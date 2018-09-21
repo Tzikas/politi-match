@@ -78,7 +78,7 @@ var map = AmCharts.makeChart("mapdiv",{
   map.addListener("clickMapObject", function(event) {
       //console.log(event);
       //console.log(event.mapObject.id.split('-')[1]);
-
+      $(".show-question").toggleClass("show");
       let st = event.mapObject.id.split('-')[1];
   
       $.post("/test", {state: st}, function(result){
