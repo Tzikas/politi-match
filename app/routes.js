@@ -111,7 +111,7 @@ module.exports = function(app, passport) {
     //     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Beto_O%27Rourke%2C_Official_portrait%2C_113th_Congress.jpg/220px-Beto_O%27Rourke%2C_Official_portrait%2C_113th_Congress.jpg',
     //     content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry'
     // });
-    app.get('/reps', (req, res) => {
+    app.get('/reps', isLoggedIn, (req, res) => {
         RepPost.find({}, function(err, repposts){
             if(err){
                 console.error(err);
@@ -123,11 +123,11 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/reps/new', (req, res) => {
+    app.get('/reps/new', isLoggedIn, (req, res) => {
         res.render('new');
     });
 
-    app.post('/reps',  (req, res) => {
+    app.post('/reps', isLoggedIn, (req, res) => {
         let data = req.body.rep;
         RepPost.create(data, function(err, newRep){
             if(err){
@@ -138,7 +138,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/reps/:id', (req, res) => {
+    app.get('/reps/:id', isLoggedIn, (req, res) => {
         RepPost.findById(req.params.id, function(err, Rep){
             if(err){
                 res.send('Representative may not exist');
@@ -150,7 +150,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.get('/reps/:id/edit', (req,res) => {
+    app.get('/reps/:id/edit', isLoggedIn, (req,res) => {
         RepPost.findById(req.params.id, function(err, Rep){
             if(err){
                 res.send('Representative may not exist');
@@ -162,7 +162,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.put('/reps/:id', (req, res) => {
+    app.put('/reps/:id', isLoggedIn, (req, res) => {
         // id, newData, callback
         RepPost.findByIdAndUpdate(req.params.id, req.body.rep, function(err, newRep){
             if(err){
@@ -173,7 +173,7 @@ module.exports = function(app, passport) {
         });
     });
 
-    app.delete('/reps/:id', (req, res) => {
+    app.delete('/reps/:id', isLoggedIn, (req, res) => {
         RepPost.findByIdAndRemove(req.params.id, function(err){
             if(err){
                 res.send("Didn't work");
